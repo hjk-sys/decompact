@@ -89,7 +89,14 @@ function searchText(s: Session): string {
 
 // ---------------------------------------------------------------- session page
 
-export function renderSession(s: Session, parent?: Session): string {
+export interface RenderOptions {
+  /** Standalone page for sending to someone: no links back into the site and no local file paths. */
+  share?: boolean;
+}
+
+const HOME_URL = 'https://github.com/hjk-sys/agentlog';
+
+export function renderSession(s: Session, parent?: Session, opts: RenderOptions = {}): string {
   const sum = summarize(s);
   const subLinks = new Map<string, Session>();
   for (const sub of s.subagents) if (sub.parentToolUseId) subLinks.set(sub.parentToolUseId, sub);
@@ -111,9 +118,11 @@ export function renderSession(s: Session, parent?: Session): string {
     banner.push(`<strong>${sum.branched} messages</strong> sit on branches you rewound or edited away. They're shown with a <span class="tag branch">rewound</span> label.`);
   }
 
-  const back = parent
-    ? `<a href="${pageKey(parent)}.html">← ${esc(parent.title)}</a>`
-    : `<a href="../index.html">← All sessions</a>`;
+  const back = opts.share
+    ? `<a href="${HOME_URL}">decompact</a>`
+    : parent
+      ? `<a href="${pageKey(parent)}.html">← ${esc(parent.title)}</a>`
+      : `<a href="../index.html">← All sessions</a>`;
 
   const subs = s.subagents.length
     ? `<section class="subs"><h2>Subagents</h2><ul>${s.subagents
@@ -133,7 +142,7 @@ export function renderSession(s: Session, parent?: Session): string {
   <div class="controls">
     <label><input type="checkbox" data-toggle="hide-compacted"> Hide compacted</label>
     <label><input type="checkbox" data-toggle="hide-branch"> Hide rewound</label>
-    <label><input type="checkbox" data-toggle="show-meta"> Show injected context</label>
+    ${opts.share ? '' : '<label><input type="checkbox" data-toggle="show-meta"> Show injected context</label>'}
     <label><input type="checkbox" data-toggle="show-thinking"> Show thinking</label>
     <button type="button" id="expand">Expand all tools</button>
   </div>
@@ -142,7 +151,11 @@ ${subs}
 <main class="log">
 ${body}
 </main>
-<footer>Session <code>${esc(s.id)}</code> · <code>${esc(s.file)}</code><br>Export as Markdown: <code>npx decompact export ${esc(s.id.slice(0, 8))}</code></footer>`,
+${
+      opts.share
+        ? `<footer>Made with <a href="${HOME_URL}">decompact</a>, which shows everything your coding agent forgot. Try it on your own history: <code>npx decompact</code></footer>`
+        : `<footer>Session <code>${esc(s.id)}</code> · <code>${esc(s.file)}</code><br>Export as Markdown: <code>npx decompact export ${esc(s.id.slice(0, 8))}</code> · Share as one HTML file: <code>npx decompact share ${esc(s.id.slice(0, 8))}</code></footer>`
+    }`,
     SESSION_SCRIPT,
   );
 }

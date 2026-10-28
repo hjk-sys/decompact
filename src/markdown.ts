@@ -3,6 +3,8 @@ import type { Block, Message, Session } from './types.js';
 export interface MarkdownOptions {
   /** Include messages that a compaction summarized away (default true). */
   compacted?: boolean;
+  /** Include messages on the live path (default true). Set false to get only what compaction hid. */
+  main?: boolean;
   /** Include messages on abandoned branches (default false). */
   branches?: boolean;
   /** Include injected context such as system reminders (default false). */
@@ -16,7 +18,7 @@ export interface MarkdownOptions {
 const MAX_TOOL_CHARS = 4000;
 
 export function toMarkdown(session: Session, opts: MarkdownOptions = {}): string {
-  const o = { compacted: true, branches: false, meta: false, thinking: false, tools: true, ...opts };
+  const o = { compacted: true, main: true, branches: false, meta: false, thinking: false, tools: true, ...opts };
   const lines: string[] = [`# ${session.title}`, ''];
   const facts = [
     `- **Source:** ${session.source === 'claude' ? 'Claude Code' : 'Codex'}`,
@@ -31,6 +33,7 @@ export function toMarkdown(session: Session, opts: MarkdownOptions = {}): string
   for (const m of session.messages) {
     if (m.status === 'compacted' && !o.compacted) continue;
     if (m.status === 'branch' && !o.branches) continue;
+    if (m.status === 'main' && !o.main) continue;
     if (m.meta && !o.meta) continue;
     const body = m.blocks.map((b) => blockMarkdown(b, o)).filter(Boolean).join('\n\n');
     if (!body) continue;

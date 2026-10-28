@@ -2,9 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadSessions, parseClaudeSession, parseCodexSession, renderSession, toMarkdown, writeSite } from '../dist/index.js';
+import { loadSessions, parseClaudeSession, parseCodexSession, redactSecrets, renderSession, shareSession, toMarkdown, writeSite } from '../dist/index.js';
 import { makeHomes } from './fixtures.js';
 
 const homes = makeHomes();
@@ -102,4 +103,38 @@ test('cli: list, export and build', () => {
   const out = run('--no-open', '--out', join(homes.root, 'cli-site'));
   assert.match(out, /2 sessions/);
   assert.ok(existsSync(join(homes.root, 'cli-site', 'index.html')));
+});
+
+test('share: one standalone file with secrets and home path redacted', () => {
+  const s = parseClaudeSession(homes.claudeFile);
+  const home = homedir();
+  const key = 'ghp_' + 'a'.repeat(36);
+  const first = s.messages.find((m) => m.blocks.some((b) => b.kind === 'text'));
+  const block = first.blocks.find((b) => b.kind === 'text');
+  block.text += ` token ${key} in ${home}/code and AWS AKIAABCDEFGHIJKLMNOP and DB_PASSWORD=hunter2hunter2`;
+  const { html, redactions } = shareSession(s);
+  assert.doesNotMatch(html, new RegExp(key));
+  assert.doesNotMatch(html, /AKIAABCDEFGHIJKLMNOP/);
+  assert.doesNotMatch(html, /hunter2hunter2/);
+  assert.match(html, /\[REDACTED GitHub token\]/);
+  assert.match(html, /~\/code/);
+  assert.equal(redactions['GitHub token'], 1);
+  assert.match(html, /Made with <a href="https:\/\/github.com\/hjk-sys\/agentlog">decompact/);
+  assert.doesNotMatch(html, /All sessions|Open subagent transcript|be nice/);
+  assert.doesNotMatch(html, /Rewriting in Rust/);
+  assert.match(shareSession(s, { branches: true }).html, /Rewriting in Rust/);
+  assert.doesNotMatch(shareSession(s, { tools: false }).html, /class="tool/);
+  assert.equal(redactSecrets('nothing to see here'), 'nothing to see here');
+});
+
+test('cli: latest, compacted-only and share', () => {
+  const env = { ...process.env, CLAUDE_CONFIG_DIR: homes.claudeDir, CODEX_HOME: homes.codexDir };
+  const run = (...args) => execFileSync(process.execPath, [cli, ...args], { env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  assert.match(run('export', 'latest', '--project', 'demo', '--source', 'claude'), /Parser in TypeScript/);
+  const hidden = run('export', '1111', '--compacted-only');
+  assert.match(hidden, /Build a parser/);
+  assert.doesNotMatch(hidden, /Tests added/);
+  const file = join(homes.root, 'shared.html');
+  run('share', '1111', '--no-open', '-o', file);
+  assert.match(readFileSync(file, 'utf8'), /Made with/);
 });

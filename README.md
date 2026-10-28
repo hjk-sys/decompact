@@ -24,6 +24,8 @@ Compaction keeps a long session going, but the agent and the app both lose the d
 - **Searches across every session.** It covers every project, every prompt and every answer.
 - **Works with Claude Code and Codex CLI.** Subagent transcripts are linked from the tool call that started them.
 - **Exports to Markdown.** Attach a full transcript to a bug report or keep it in your notes.
+- **Shares one session as a single HTML file.** Common secrets (API keys, tokens, passwords) and your home folder path are redacted.
+- **Claude Code plugin.** `/decompact:recall` lets Claude read what compaction hid from the session you're in.
 - **Private by design.** No server, no account, no network. It writes static HTML to `~/.decompact`, and nothing leaves your machine.
 
 ## Usage
@@ -33,7 +35,10 @@ npx decompact                  # build the site and open it
 npx decompact list             # sessions, newest first
 npx decompact open 3f2a        # open one session by id prefix
 npx decompact export 3f2a > session.md
+npx decompact share 3f2a       # one HTML file you can send to someone
 ```
+
+Use `latest` instead of an id for the newest session. Add `--project <text>` to get the newest session in one project.
 
 | Option | What it does |
 | --- | --- |
@@ -45,6 +50,24 @@ npx decompact export 3f2a > session.md
 | `export --main-only` | Leave out compacted messages |
 | `export --thinking` | Include thinking blocks |
 | `export --no-tools` | Leave out tool calls |
+| `export --compacted-only` | Only the messages compaction hid |
+| `share -o <file>` | Where to write the shared page (default `decompact-<id>.html`) |
+| `share --no-redact` | Keep secrets and paths as they are |
+
+`share` takes the same `--main-only`, `--branches`, `--thinking` and `--no-tools` flags as `export`. Redaction catches common key and token formats, not everything, so skim the file before you send it.
+
+## Claude Code plugin
+
+```sh
+claude plugin marketplace add hjk-sys/agentlog
+claude plugin install decompact@decompact
+```
+
+| Command | What it does |
+| --- | --- |
+| `/decompact:recall [topic]` | Claude reads the compacted part of the current session and answers from it. Claude also uses it on its own when you ask about something it no longer remembers. |
+| `/decompact:open` | Builds the history site and opens it |
+| `/decompact:share` | Saves the current session as one redacted HTML file |
 
 It reads `~/.claude/projects` (or `$CLAUDE_CONFIG_DIR`) and `~/.codex/sessions` (or `$CODEX_HOME`). Point it elsewhere with `--claude-dir` and `--codex-dir`. It needs Node.js 18 or newer.
 

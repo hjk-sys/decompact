@@ -1,0 +1,10 @@
+{
+  "name": "decompact",
+  "description": "Recover what compaction hid. Lets Claude read the compacted part of the current session, and lets you browse or share your full Claude Code history.",
+  "version": "0.2.0",
+  "author": { "name": "hjk-sys" },
+  "homepage": "https://github.com/hjk-sys/agentlog",
+  "repository": "https://github.com/hjk-sys/agentlog",
+  "license": "MIT",
+  "keywords": ["compaction", "history", "context", "transcript"]
+}

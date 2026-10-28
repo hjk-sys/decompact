@@ -1,6 +1,6 @@
 {
   "name": "decompact",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Browse and search your full Claude Code and Codex history, including everything compaction hid and every branch you rewound.",
   "keywords": [
     "claude-code",

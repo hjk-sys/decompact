@@ -1,0 +1,12 @@
+{
+  "name": "decompact",
+  "description": "Plugins from the decompact project.",
+  "owner": { "name": "hjk-sys" },
+  "plugins": [
+    {
+      "name": "decompact",
+      "source": "./",
+      "description": "Recover what compaction hid. Lets Claude read the compacted part of the current session, and lets you browse or share your full Claude Code history."
+    }
+  ]
+}
