@@ -8,6 +8,19 @@ When Claude Code compacts a conversation or you rewind it, the earlier messages 
 npx agentlog
 ```
 
+| Option | What it does |
+| --- | --- |
+| `--source claude` / `--source codex` | Only one agent |
+| `--project <text>` | Only sessions whose folder contains `<text>` |
+| `--out <dir>` | Write the site somewhere other than `~/.agentlog` |
+| `--no-open` | Build without opening a browser |
+| `export --branches` | Include rewound branches |
+| `export --main-only` | Leave out compacted messages |
+| `export --thinking` | Include thinking blocks |
+| `export --no-tools` | Leave out tool calls |
+
+It reads `~/.claude/projects` (or `$CLAUDE_CONFIG_DIR`) and `~/.codex/sessions` (or `$CODEX_HOME`). Point it elsewhere with `--claude-dir` and `--codex-dir`.
+
 ![A session with compacted and rewound messages recovered](docs/screenshot.png)
 
 - **Recovers compacted context.** Everything above a compaction is shown, labeled, with the summary the agent was left with.
@@ -25,19 +38,6 @@ npx agentlog list             # sessions, newest first
 npx agentlog open 3f2a        # open one session by id prefix
 npx agentlog export 3f2a > session.md
 ```
-
-| Option | What it does |
-| --- | --- |
-| `--source claude` / `--source codex` | Only one agent |
-| `--project <text>` | Only sessions whose folder contains `<text>` |
-| `--out <dir>` | Write the site somewhere other than `~/.agentlog` |
-| `--no-open` | Build without opening a browser |
-| `export --branches` | Include rewound branches |
-| `export --main-only` | Leave out compacted messages |
-| `export --thinking` | Include thinking blocks |
-| `export --no-tools` | Leave out tool calls |
-
-It reads `~/.claude/projects` (or `$CLAUDE_CONFIG_DIR`) and `~/.codex/sessions` (or `$CODEX_HOME`). Point it elsewhere with `--claude-dir` and `--codex-dir`.
 
 ## How it works
 
