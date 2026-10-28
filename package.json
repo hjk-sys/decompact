@@ -1,16 +1,23 @@
 {
   "name": "decompact",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Browse and search your full Claude Code and Codex history, including everything compaction hid and every branch you rewound.",
   "keywords": [
     "claude-code",
+    "claude",
     "codex",
+    "codex-cli",
     "ai-agents",
-    "transcript",
-    "history",
+    "coding-agent",
     "compaction",
+    "context-window",
+    "chat-history",
+    "session-history",
+    "transcript",
     "viewer",
-    "cli"
+    "search",
+    "cli",
+    "llm"
   ],
   "license": "MIT",
   "author": "hjk-sys",
