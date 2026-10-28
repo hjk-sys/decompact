@@ -9,17 +9,17 @@ import { toMarkdown } from './markdown.js';
 import { fmtDate, pageKey, summarize, writeSite } from './render.js';
 import type { Session, Source } from './types.js';
 
-const HELP = `agentlog: browse your full Claude Code and Codex history, including
+const HELP = `decompact: browse your full Claude Code and Codex history, including
 everything compaction hid and every branch you rewound.
 
 Usage
-  agentlog                    Build the history site and open it in your browser
-  agentlog list               List sessions, newest first
-  agentlog open <id>          Open one session (id or unique prefix)
-  agentlog export <id>        Print a session as Markdown
+  decompact                    Build the history site and open it in your browser
+  decompact list               List sessions, newest first
+  decompact open <id>          Open one session (id or unique prefix)
+  decompact export <id>        Print a session as Markdown
 
 Options
-  --out <dir>                 Where to write the site (default ~/.agentlog)
+  --out <dir>                 Where to write the site (default ~/.decompact)
   --no-open                   Build without opening a browser
   --source <claude|codex>     Only one agent
   --project <text>            Only sessions whose folder contains <text>
@@ -88,12 +88,12 @@ function load(flags: Args['flags']): Session[] {
     project: str(flags.project),
     onError: () => errors++,
   });
-  if (errors) process.stderr.write(`agentlog: skipped ${errors} log file${errors === 1 ? '' : 's'} that could not be read\n`);
+  if (errors) process.stderr.write(`decompact: skipped ${errors} log file${errors === 1 ? '' : 's'} that could not be read\n`);
   return sessions;
 }
 
 function pick(sessions: Session[], query: string | undefined): Session {
-  if (!query) fail('Give a session id or prefix. Run `agentlog list` to see them.');
+  if (!query) fail('Give a session id or prefix. Run `decompact list` to see them.');
   const found = findSession(sessions, query);
   if (!found) fail(`No session matches "${query}".`);
   if (Array.isArray(found)) fail(`"${query}" matches ${found.length} sessions. Use a longer prefix:\n${found.slice(0, 10).map((s) => `  ${s.id}  ${s.title}`).join('\n')}`);
@@ -114,7 +114,7 @@ function openInBrowser(file: string) {
 }
 
 function fail(message: string): never {
-  process.stderr.write(`agentlog: ${message}\n`);
+  process.stderr.write(`decompact: ${message}\n`);
   process.exit(1);
 }
 
@@ -123,7 +123,7 @@ function main() {
   if (flags.h || flags.help || cmd === 'help') return void process.stdout.write(HELP);
   if (flags.v || flags.version) return void process.stdout.write(`${version()}\n`);
 
-  const outDir = resolve(str(flags.out) ?? join(homedir(), '.agentlog'));
+  const outDir = resolve(str(flags.out) ?? join(homedir(), '.decompact'));
   const shouldOpen = !flags['no-open'];
 
   switch (cmd) {
@@ -135,7 +135,7 @@ function main() {
       const site = writeSite(sessions, outDir);
       const totals = sessions.map(summarize).reduce((t, s) => ({ c: t.c + s.compacted, b: t.b + s.branched }), { c: 0, b: 0 });
       process.stdout.write(
-        `agentlog: ${sessions.length} sessions, ${totals.c} messages recovered from compaction, ${totals.b} on rewound branches\n` +
+        `decompact: ${sessions.length} sessions, ${totals.c} messages recovered from compaction, ${totals.b} on rewound branches\n` +
           `Wrote ${site.index}\n`,
       );
       if (shouldOpen) openInBrowser(site.index);
@@ -184,7 +184,7 @@ function main() {
       return;
     }
     default:
-      fail(`Unknown command "${cmd}". Run \`agentlog --help\`.`);
+      fail(`Unknown command "${cmd}". Run \`decompact --help\`.`);
   }
 }
 

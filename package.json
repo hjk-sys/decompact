@@ -1,5 +1,5 @@
 {
-  "name": "agentlog",
+  "name": "decompact",
   "version": "0.1.0",
   "description": "Browse and search your full Claude Code and Codex history, including everything compaction hid and every branch you rewound.",
   "keywords": [
@@ -22,7 +22,7 @@
   "bugs": "https://github.com/hjk-sys/agentlog/issues",
   "type": "module",
   "bin": {
-    "agentlog": "dist/cli.js"
+    "decompact": "dist/cli.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
