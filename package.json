@@ -1,0 +1,47 @@
+{
+  "name": "agentlog",
+  "version": "0.1.0",
+  "description": "Browse and search your full Claude Code and Codex history, including everything compaction hid and every branch you rewound.",
+  "keywords": [
+    "claude-code",
+    "codex",
+    "ai-agents",
+    "transcript",
+    "history",
+    "compaction",
+    "viewer",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "hjk-sys",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hjk-sys/agentlog.git"
+  },
+  "homepage": "https://github.com/hjk-sys/agentlog#readme",
+  "bugs": "https://github.com/hjk-sys/agentlog/issues",
+  "type": "module",
+  "bin": {
+    "agentlog": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/agentlog.test.js",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}
