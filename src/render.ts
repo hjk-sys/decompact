@@ -94,7 +94,7 @@ export interface RenderOptions {
   share?: boolean;
 }
 
-const HOME_URL = 'https://github.com/hjk-sys/agentlog';
+const HOME_URL = 'https://github.com/hjk-sys/decompact';
 
 export function renderSession(s: Session, parent?: Session, opts: RenderOptions = {}): string {
   const sum = summarize(s);

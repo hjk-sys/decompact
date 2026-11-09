@@ -23,10 +23,10 @@
   "author": "hjk-sys",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hjk-sys/agentlog.git"
+    "url": "git+https://github.com/hjk-sys/decompact.git"
   },
-  "homepage": "https://github.com/hjk-sys/agentlog#readme",
-  "bugs": "https://github.com/hjk-sys/agentlog/issues",
+  "homepage": "https://github.com/hjk-sys/decompact#readme",
+  "bugs": "https://github.com/hjk-sys/decompact/issues",
   "type": "module",
   "bin": {
     "decompact": "dist/cli.js"
