@@ -119,7 +119,7 @@ test('share: one standalone file with secrets and home path redacted', () => {
   assert.match(html, /\[REDACTED GitHub token\]/);
   assert.match(html, /~\/code/);
   assert.equal(redactions['GitHub token'], 1);
-  assert.match(html, /Made with <a href="https:\/\/github.com\/hjk-sys\/agentlog">decompact/);
+  assert.match(html, /Made with <a href="https:\/\/github.com\/hjk-sys\/decompact">decompact/);
   assert.doesNotMatch(html, /All sessions|Open subagent transcript|be nice/);
   assert.doesNotMatch(html, /Rewriting in Rust/);
   assert.match(shareSession(s, { branches: true }).html, /Rewriting in Rust/);

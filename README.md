@@ -4,7 +4,7 @@
 
 [![npm](https://img.shields.io/npm/v/decompact)](https://www.npmjs.com/package/decompact)
 [![downloads](https://img.shields.io/npm/dw/decompact)](https://www.npmjs.com/package/decompact)
-[![CI](https://github.com/hjk-sys/agentlog/actions/workflows/ci.yml/badge.svg)](https://github.com/hjk-sys/agentlog/actions/workflows/ci.yml)
+[![CI](https://github.com/hjk-sys/decompact/actions/workflows/ci.yml/badge.svg)](https://github.com/hjk-sys/decompact/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/decompact)](LICENSE)
 
 When Claude Code compacts a conversation or you rewind it, the earlier messages vanish from the app. They're still in log files on your disk, though. `decompact` reads those files and gives you your whole history back as a fast, searchable local web page.
@@ -13,7 +13,7 @@ When Claude Code compacts a conversation or you rewind it, the earlier messages 
 npx decompact
 ```
 
-![Searching every session, then opening one with its compacted and rewound messages recovered](https://raw.githubusercontent.com/hjk-sys/agentlog/main/docs/demo.gif)
+![Searching every session, then opening one with its compacted and rewound messages recovered](https://raw.githubusercontent.com/hjk-sys/decompact/main/docs/demo.gif)
 
 ## Why
 
@@ -59,7 +59,7 @@ Use `latest` instead of an id for the newest session. Add `--project <text>` to 
 ## Claude Code plugin
 
 ```sh
-claude plugin marketplace add hjk-sys/agentlog
+claude plugin marketplace add hjk-sys/decompact
 claude plugin install decompact@decompact
 ```
 
